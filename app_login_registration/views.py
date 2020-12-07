@@ -17,15 +17,14 @@ def registration(request):
     pwHash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     print(pwHash)
     errors = User.objects.validatorRegister(request.POST)
-    print(errors.items())
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect('/')
     else:
         user = User.objects.create(firstName=firstName, lastName=lastName, email=email, password=pwHash)
-        request.session['userId'] = user.id
-        return redirect('/dashboard')
+        request.session['userid'] = user.id
+        return redirect('/books')
 
 def login(request):
     email = request.POST['email']
@@ -35,27 +34,16 @@ def login(request):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-            print("\n*****ERRORS OCCURRED*****\n")
-            print("Error: " + value + "\n")
         return redirect('/')
     elif user:
         loggedUser = user[0]
         if bcrypt.checkpw(password.encode(), loggedUser.password.encode()):
-            request.session['userId'] = loggedUser.id
-            return redirect('/dashboard')
+            request.session['userid'] = loggedUser.id
+            return redirect('/books')
         else:
             messages.error(request, "Email or password was invalid")
     return redirect('/')
 
-def dashboard(request):
-    if 'userId' not in request.session:
-        return redirect('/')
-    else:
-        context = {
-            'user': User.objects.get(id=request.session['userId'])
-        }
-        return render(request, 'dashboard.html', context)
-
 def endSession(request):
-    del request.session['userId']
+    del request.session['userid']
     return redirect('/')

@@ -5,11 +5,12 @@ from django.contrib import messages
 # Create your views here.
 
 def index(request):
-    if not 'userId' in request.session:
+    if not 'userid' in request.session:
         return redirect('/')
     else:
-        currentUser = User.objects.get(id=request.session['userId'])
+        currentUser = User.objects.get(id=request.session['userid'])
         context = {
             'currentUser': currentUser,
+            'user': User.objects.get(id=request.session['userid']),
         }
     return render(request, 'books.html', context)
