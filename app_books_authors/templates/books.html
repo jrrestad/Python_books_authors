@@ -7,6 +7,42 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Books page</h1>
+    <div class="wrapper">
+        <div class="border-bottom p-3 bg-white shadow-sm">
+            <div class="container">
+                <a href="/logout" class="float-right">Logout</a>
+                <h1 class="text-align-center text-inset">Welcome to the library</h1>
+            </div>
+        </div>
+        <div class="container border p-5 d-flex justify-content-between">
+            <form 
+            class="form-group col-4"
+            action="/books/add" 
+            method="post">
+            {% csrf_token %}
+            <h4>Add a book</h4>
+                <label for="title">Title</label>
+                <input class="form-control" name="title" type="text">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                <button class="btn-primary form-control mt-4" type="submit">Add</button>
+            </form>
+            <div class="col-4">
+                <h4>All books</h4>
+                {% if books %}
+                    {% for book in books %}
+                        <a href="">{{ book.title }}</a>
+                        {% if book.uploaded_by.id == user.id %}
+                            <p>(You uploaded this book!)</p>
+                        {% else %}
+                            <p>(uploaded by {{book.uploaded_by.firstName}} {{book.uploaded_by.lastName}})</p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>There are currently no books to list</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>

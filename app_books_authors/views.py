@@ -10,7 +10,18 @@ def index(request):
     else:
         currentUser = User.objects.get(id=request.session['userid'])
         context = {
-            'currentUser': currentUser,
-            'user': User.objects.get(id=request.session['userid']),
+            'user': currentUser,
+            'books': Book.objects.all(),
         }
     return render(request, 'books.html', context)
+
+def addBook(request):
+    title = request.POST['title']
+    description = request.POST['description']
+    uploaded_by = User.objects.get(id=request.session['userid'])
+    book = Book.objects.create(title=title, description=description, uploaded_by=uploaded_by)
+    book.save()
+    # After user creates a book, automatically add it to their list of liked books
+    getLastBook = Book.objects.last()
+    uploaded_by.liked_books.add(getLastBook)
+    return redirect('/books')
