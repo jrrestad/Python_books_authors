@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<style>
+    .text-inset, h1, h2, label{
+        background-color: #000000;
+        color: transparent;
+        text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
+    }
+    .inset{
+        background-color: #949494;
+        color: transparent;
+        text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    }
+</style>
+<body class="bg-light">
+    <div class="wrapper">
+        <div class="d-flex justify-content-center border-bottom p-3 bg-white shadow-sm">
+            <h1 class="text-align-center text-inset">Welcome to Login and Registration</h1>
+        </div>
+        <div class="py-3">
+            <div class="container">
+                {% if messages %}
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        <span class="text-danger">
+                            {{ message }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="container d-flex justify-content-between py-3" style="height:100%">
+                <form
+                class="col-5 shadow p-4 bg-white"
+                action="/registration" 
+                method="post">
+                {% csrf_token %}
+                    <h2 class="mb-2">Sign up!</h2>
+                    <label class="text-muted" for="firstName">First name</label>
+                    <input class="form-control" type="text" name="firstName">
+                    
+                    <label class="text-muted" for="lastName">Last name</label>
+                    <input class="form-control" type="text" name="lastName">
+                    
+                    <label class="text-muted" for="email">Email</label>
+                    <input class="form-control" type="text" name="email">
+
+                    <label class="text-muted" for="{{form.password.id_for_label}}">Password</label>
+                    <input class="form-control" type="password" name="password">
+                    
+                    <label class="text-muted" for="confirmPassword">Confirm password</label>
+                    <input class="form-control" type="password" name="confirmPassword">
+                    
+                    <button class="form-control btn-primary mt-4" type="submit">Register</button>
+                    </form>
+                    <form
+                    class="col-5 p-5 shadow bg-white"
+                    action="/login" 
+                    method="post">
+                    {% csrf_token %}
+                    <h2 class="mb-2">Sign in!</h2>
+                    <label class="text-muted" for="email">Email address</label>
+                    <input class="form-control" type="text" name="email">
+                    
+                    <label class="text-muted" for="password">Password</label>
+                    <input class="form-control" type="password" name="password">
+                    
+                    <button class="form-control btn-primary mt-4" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
